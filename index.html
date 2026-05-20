@@ -72,11 +72,11 @@
         }
 
         /* 
-              3. ЛОГОТИП
+              3. ЛОГОТИП И СОЦИАЛЬНЫЕ КНОПКИ
                */
         .logo-header {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .logo-header img {
@@ -84,6 +84,45 @@
             width: 100%;
             height: auto;
             filter: drop-shadow(0 0 30px rgba(79, 172, 254, 0.3));
+        }
+
+        /* Обновлённые соц-кнопки под логотипом */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 15px 0 25px 0;
+        }
+
+        .social-links a {
+            color: #c1d9ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            padding: 8px 18px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        .social-links a i {
+            font-size: 1.1em;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.05);
+            background: rgba(79, 172, 254, 0.15);
+            border-color: #4a7c98;
+            box-shadow: 0 0 25px rgba(79, 172, 254, 0.15);
+            color: #fff;
         }
 
         /* 
@@ -94,6 +133,7 @@
             margin-bottom: 10px;
             color: #c1d9ff;
             text-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+            text-align: center;
         }
 
         .sub-title {
@@ -102,6 +142,7 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 30px;
+            text-align: center;
         }
 
         .section {
@@ -216,46 +257,7 @@
         }
 
         /* 
-              5. ФУТЕР С СОЦСЕТЯМИ
-               */
-        .footer-links {
-            margin-top: 40px;
-            text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #7b8bb3;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            padding: 10px 20px;
-            border-radius: 30px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .footer-links a:hover {
-            color: #c1d9ff;
-            background: rgba(255,255,255,0.12);
-            transform: translateY(-3px);
-            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.2);
-        }
-
-        .footer-links a i {
-            font-size: 1.1em;
-        }
-
-        /* 
-              6. АДАПТИВ (Мобильные)
+              5. АДАПТИВ (Мобильные)
                */
         @media (max-width: 650px) {
             .container { padding: 15px; }
@@ -274,16 +276,34 @@
             .logo-header img {
                 max-width: 200px;
             }
+            .social-links a {
+                padding: 6px 14px;
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- ЛОГОТИП -->
         <div class="logo-header">
             <img src="logo.png" alt="LYNRI Logo">
         </div>
 
-  
+        <!-- СОЦИАЛЬНЫЕ ССЫЛКИ ПОД ЛОГОТИПОМ -->
+        <div class="social-links">
+            <a href="https://vk.com/lynriblauheart" target="_blank" aria-label="VK">
+                <i class="fa-brands fa-vk"></i> VK
+            </a>
+            <a href="https://discord.gg/lynriblauheart" target="_blank" aria-label="Discord">
+                <i class="fa-brands fa-discord"></i> Discord
+            </a>
+            <a href="https://lynxheart.myportfolio.com/work" target="_blank" aria-label="Портфолио">
+                <i class="fa-solid fa-briefcase"></i> Портфолио
+            </a>
+        </div>
+
+        <!-- Заголовок -->
         <h1>✦ Очередь заказов</h1>
         <div class="sub-title">в работе</div>
 
@@ -312,19 +332,6 @@
                 <span id="done-count">0</span>
             </div>
             <div id="done-list"></div>
-        </div>
-
-
-        <div class="footer-links">
-            <a href="https://vk.com/ваш_вк" target="_blank" aria-label="VK">
-                <i class="fa-brands fa-vk"></i> VK
-            </a>
-            <a href="https://discord.gg/ваш_дискорд" target="_blank" aria-label="Discord">
-                <i class="fa-brands fa-discord"></i> Discord
-            </a>
-            <a href="https://lynxheart.myportfolio.com/work" target="_blank" class="portfolio-link" aria-label="Портфолио">
-                <i class="fa-solid fa-briefcase"></i> Портфолио
-            </a>
         </div>
     </div>
 

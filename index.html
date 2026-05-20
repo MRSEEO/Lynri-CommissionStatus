@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYNRI — Очередь заказов</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* 
+              1. БАЗОВЫЕ ЦВЕТА
+               */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-image: url('background.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+
+            color: #e0e5ff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(11, 13, 23, 0.7); 
+            backdrop-filter: blur(6px);
+            padding: 30px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+        }
+
+        /* 
+              2. КАСТОМНЫЕ ШРИФТЫ
+               */
+        @font-face {
+            font-family: 'Angelic Bonques';
+            src: url('fonts/Angelic Bonques Sans Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bergamasco';
+            src: url('fonts/BergamascoLight.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Pixelzone';
+            src: url('fonts/Pixelzone.ttf') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        h1, h2, .order-nick {
+            font-family: 'Angelic Bonques', 'Playfair Display', serif;
+            letter-spacing: 1px;
+        }
+
+        /* 
+              3. ЛОГОТИП
+               */
+        .logo-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-header img {
+            max-width: 100%;
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 0 30px rgba(79, 172, 254, 0.3));
+        }
+
+        /* 
+              4. СТИЛИ КАРТОЧЕК
+               */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #c1d9ff;
+            text-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .sub-title {
+            font-size: 0.9rem;
+            color: #7b8bb3;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: rgba(20, 25, 45, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: #99b4e6;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title span {
+            font-size: 0.8rem;
+            background: rgba(255,255,255,0.05);
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #7b8bb3;
+        }
+
+        /* = НОВАЯ КАРТОЧКА = */
+        .order-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #4a7c98;
+            background: #141c2b;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .order-card:hover {
+            transform: translateX(3px);
+        }
+
+        .order-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: var(--progress, 0%);
+            background: rgba(74, 124, 152, 0.25);
+            transition: width 0.5s ease;
+            z-index: 0;
+        }
+
+        .order-nick {
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #dbe6ff;
+            letter-spacing: 0.5px;
+        }
+
+        .order-right {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        /* Бейджи статуса оплаты */
+        .payment-badge {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .payment-paid {
+            background: #1b4a3b;
+            color: #6fcf97;
+        }
+        .payment-reserved {
+            background: #3d315a;
+            color: #b28fe6;
+        }
+        .payment-unpaid {
+            background: #4a2e2e;
+            color: #f28b8b;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #7b8bb3;
+            min-width: 35px;
+            text-align: right;
+        }
+
+        /* 
+              5. ФУТЕР С СОЦСЕТЯМИ
+               */
+        .footer-links {
+            margin-top: 40px;
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #7b8bb3;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: #c1d9ff;
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.2);
+        }
+
+        .footer-links a i {
+            font-size: 1.1em;
+        }
+
+        /* 
+              6. АДАПТИВ (Мобильные)
+               */
+        @media (max-width: 650px) {
+            .container { padding: 15px; }
+            .order-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .order-right {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .order-nick {
+                font-size: 1rem;
+            }
+            .logo-header img {
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-header">
+            <img src="logo.png" alt="LYNRI Logo">
+        </div>
+
+  
+        <h1>✦ Очередь заказов</h1>
+        <div class="sub-title">в работе</div>
+
+        <!-- Блок: Активные (В работе) -->
+        <div class="section" id="active-section">
+            <div class="section-title">
+                <span>Активные</span>
+                <span id="active-count">0</span>
+            </div>
+            <div id="active-list"></div>
+        </div>
+
+        <!-- Блок: Бронь -->
+        <div class="section" id="reserved-section">
+            <div class="section-title">
+                <span>Бронь</span>
+                <span id="reserved-count">0</span>
+            </div>
+            <div id="reserved-list"></div>
+        </div>
+
+        <!-- Блок: Выполнено -->
+        <div class="section" id="done-section">
+            <div class="section-title">
+                <span>Выполнено</span>
+                <span id="done-count">0</span>
+            </div>
+            <div id="done-list"></div>
+        </div>
+
+
+        <div class="footer-links">
+            <a href="https://vk.com/ваш_вк" target="_blank" aria-label="VK">
+                <i class="fa-brands fa-vk"></i> VK
+            </a>
+            <a href="https://discord.gg/ваш_дискорд" target="_blank" aria-label="Discord">
+                <i class="fa-brands fa-discord"></i> Discord
+            </a>
+            <a href="https://lynxheart.myportfolio.com/work" target="_blank" class="portfolio-link" aria-label="Портфолио">
+                <i class="fa-solid fa-briefcase"></i> Портфолио
+            </a>
+        </div>
+    </div>
+
+    <!-- 
+        Загружаем список из таблицы
+         -->
+    <script>
+        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRECqnD-OOCX1bl_h93zz3nt8xxauWcC_f7AHNR52vi6DpwQ6y5DIsLlx8XBZGhv_gj8Gy8Ri6N9Inb/pub?output=csv';
+
+        const PAYMENT_CLASSES = {
+            'Оплачено': 'payment-paid',
+            'Бронь': 'payment-reserved',
+            'Не оплачено': 'payment-unpaid'
+        };
+
+        async function loadOrders() {
+            try {
+                const response = await fetch(GOOGLE_SHEETS_CSV_URL, { cache: 'no-store' });
+                if (!response.ok) throw new Error('Ошибка загрузки таблицы');
+                const csvText = await response.text();
+                const rows = csvText.trim().split('\n').slice(1);
+                
+                const orders = rows.map(row => {
+                    const cols = row.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                    return {
+                        nick: cols[0] || 'Без имени',
+                        progress: parseInt(cols[1]) || 0,
+                        payment: cols[2] || 'Не оплачено',
+                        status: cols[3] || 'В работе'
+                    };
+                });
+
+                const validOrders = orders.filter(o => o.nick !== 'Без имени');
+                renderOrders(validOrders);
+
+            } catch (error) {
+                console.error('Ошибка при загрузке:', error);
+                document.querySelector('#active-list').innerHTML = 
+                    '<p style="color:#f28b8b; text-align:center; padding:20px;">Ошибка списка. Проверьте ссылку CSV.</p>';
+            }
+        }
+
+        function renderOrders(orders) {
+            const active = orders.filter(o => o.status === 'В работе' && o.progress < 100);
+            const reserved = orders.filter(o => o.payment === 'Бронь');
+            const done = orders.filter(o => o.status === 'Выполнено' || o.progress === 100);
+
+            function createCard(order) {
+                const badgeClass = PAYMENT_CLASSES[order.payment] || 'payment-unpaid';
+                return `
+                    <div class="order-card" style="--progress: ${order.progress}%;">
+                        <span class="order-nick">${order.nick}</span>
+                        <div class="order-right">
+                            <span class="payment-badge ${badgeClass}">${order.payment}</span>
+                            <span class="progress-text">${order.progress}%</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('active-list').innerHTML = active.map(createCard).join('');
+            document.getElementById('reserved-list').innerHTML = reserved.map(createCard).join('');
+            document.getElementById('done-list').innerHTML = done.map(createCard).join('');
+
+            document.getElementById('active-count').textContent = active.length;
+            document.getElementById('reserved-count').textContent = reserved.length;
+            document.getElementById('done-count').textContent = done.length;
+        }
+
+        loadOrders();
+        setInterval(loadOrders, 30000);
+    </script>
+</body>
+</html>

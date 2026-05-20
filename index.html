@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* =========================================================
+        /* =
               1. БАЗОВЫЕ ЦВЕТА И ФОН (ГРАДИЕНТ)
-              ========================================================= */
+              = */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -30,9 +30,9 @@
             overflow-x: hidden;
         }
 
-        /* =========================================================
+        /* =
               2. ДЕКОРАТИВНЫЕ ЭЛЕМЕНТЫ (ЗВЁЗДЫ, ЛУНА, СОЗВЕЗДИЕ)
-              ========================================================= */
+              = */
 
         /* Общий контейнер для декора (чтобы не мешал контенту) */
         .stars-wrapper {
@@ -94,7 +94,6 @@
             100% { opacity: 0; }
         }
 
-        /* Созвездие (SVG) */
         .constellation {
             position: fixed;
             bottom: 60px;
@@ -138,7 +137,6 @@
             border-radius: 50%;
         }
 
-        /* Ушки (декоративные сверху) */
         .ears {
             position: fixed;
             top: 0;
@@ -173,9 +171,9 @@
             transform: rotate(15deg);
         }
 
-        /* =========================================================
+        /* =
               3. ОСНОВНОЙ КОНТЕЙНЕР
-              ========================================================= */
+              = */
         .container {
             position: relative;
             z-index: 1;
@@ -189,9 +187,6 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
         }
 
-        /* =========================================================
-              4. ШРИФТЫ
-              ========================================================= */
         @font-face {
             font-family: 'Angelic Bonques';
             src: url('fonts/Angelic Bonques Sans Regular.ttf') format('truetype');
@@ -216,9 +211,9 @@
             letter-spacing: 1px;
         }
 
-        /* =========================================================
+        /* =
               5. ЛОГОТИП И СОЦИАЛКИ
-              ========================================================= */
+              = */
         .logo-header {
             text-align: center;
             margin-bottom: 10px;
@@ -269,9 +264,9 @@
             color: #fff;
         }
 
-        /* =========================================================
+        /* =
               6. СТИЛИ КАРТОЧЕК
-              ========================================================= */
+              = */
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
@@ -407,9 +402,9 @@
             text-align: right;
         }
 
-        /* =========================================================
+        /* =
               7. АДАПТИВ
-              ========================================================= */
+              = */
         @media (max-width: 650px) {
             .container { padding: 15px; }
             .order-card {
@@ -431,7 +426,6 @@
                 padding: 6px 14px;
                 font-size: 0.7rem;
             }
-            /* На мобильных скрываем часть декора */
             .moon, .constellation {
                 display: none;
             }
@@ -445,9 +439,6 @@
 </head>
 <body>
 
-    <!-- =========================================================
-        ДЕКОРАТИВНЫЕ ЭЛЕМЕНТЫ (ЗВЁЗДЫ, ЛУНА, СОЗВЕЗДИЕ)
-        ========================================================= -->
     <div class="stars-wrapper">
         <!-- Звёзды (генерация через JS) -->
         <div id="stars-container"></div>
@@ -473,9 +464,9 @@
         <div class="ears"></div>
     </div>
 
-    <!-- =========================================================
+    <!-- =
         ОСНОВНОЙ КОНТЕНТ
-        ========================================================= -->
+        = -->
     <div class="container">
 
         <!-- ЛОГОТИП -->
@@ -488,8 +479,8 @@
             <a href="https://vk.com/lynriblauheart" target="_blank" aria-label="VK">
                 <i class="fa-brands fa-vk"></i> VK
             </a>
-            <a href="https://discord.gg/lynriblauheart" target="_blank" aria-label="Discord">
-                <i class="fa-brands fa-discord"></i> Discord
+            <a title="https://discord.gg/lynriblauheart" target="_blank" aria-label="Discord">
+                <i class="fa-brands fa-discord"></i> lynriblauheart
             </a>
             <a href="https://lynxheart.myportfolio.com/work" target="_blank" aria-label="Портфолио">
                 <i class="fa-solid fa-briefcase"></i> Портфолио

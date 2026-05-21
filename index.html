@@ -331,7 +331,7 @@
             transform: translateX(3px);
         }
 
-        /* Фон прогресса (0% = пустой) */
+        /* Фон прогресса теперь использует реальный процент */
         .order-card::before {
             content: '';
             position: absolute;
@@ -574,11 +574,15 @@
                         payment = 'Не оплачено';
                     }
 
+                    // Добавил чтение процента из 8-го столбца (индекс 7)
+                    let progress = parseInt(cols[7]) || 0;
+
                     return {
                         owner: cols[0] || 'Без имени',
                         task: cols[1] || 'Задача',
                         status: cols[2] || 'Не начато',
-                        payment: payment
+                        payment: payment,
+                        progress: progress // теперь он есть в объекте
                     };
                 });
 
@@ -601,14 +605,14 @@
             function createCard(order) {
                 const badgeClass = PAYMENT_CLASSES[order.payment] || 'payment-unpaid';
                 return `
-                    <div class="order-card" style="--progress: 0%;">
+                    <div class="order-card" style="--progress: ${order.progress}%;">
                         <span class="order-nick">
                             ${order.owner} 
                             <span class="task-name">[${order.task}]</span>
                         </span>
                         <div class="order-right">
                             <span class="payment-badge ${badgeClass}">${order.payment}</span>
-                            <span class="progress-text">0%</span>
+                            <span class="progress-text">${order.progress}%</span>
                         </div>
                     </div>
                 `;

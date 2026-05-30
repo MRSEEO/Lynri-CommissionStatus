@@ -1,0 +1,404 @@
+/* =========================================================
+   1. БАЗОВЫЕ ЦВЕТА И ФОН (ГРАДИЕНТ)
+   ========================================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: linear-gradient(135deg, #0b0d17 0%, #1a1f3a 40%, #2d1f4a 100%);
+    min-height: 100vh;
+    color: #e0e5ff;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px; /* Чуть шире для портфолио */
+    width: 100%;
+    background: rgba(11, 13, 23, 0.7);
+    backdrop-filter: blur(8px);
+    padding: 30px;
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+}
+
+/* =========================================================
+   2. ДЕКОРАТИВНЫЕ ЭЛЕМЕНТЫ (ЗВЁЗДЫ, ЛУНА, СОЗВЕЗДИЕ)
+   ========================================================= */
+.stars-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle var(--duration) ease-in-out infinite alternate;
+    box-shadow: 0 0 6px rgba(255,255,255,0.4);
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.3; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1.2); }
+}
+
+.shooting-star {
+    position: absolute;
+    top: 10%;
+    left: 80%;
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(to right, rgba(255,255,255,0), #ffffff);
+    border-radius: 50%;
+    transform: rotate(-35deg);
+    animation: shoot 8s linear infinite;
+    box-shadow: 0 0 20px rgba(255,255,255,0.5);
+}
+
+.shooting-star::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #fff;
+}
+
+@keyframes shoot {
+    0% { transform: translate(0, 0) rotate(-35deg); opacity: 0; }
+    5% { opacity: 1; }
+    20% { opacity: 1; }
+    40% { opacity: 0; transform: translate(-600px, 400px) rotate(-35deg); }
+    100% { opacity: 0; }
+}
+
+.constellation {
+    position: fixed;
+    bottom: 60px;
+    right: 40px;
+    width: 200px;
+    height: 150px;
+    opacity: 0.25;
+    z-index: 0;
+    stroke: rgba(255,255,255,0.6);
+    fill: none;
+    stroke-width: 1.5;
+}
+
+.constellation circle {
+    fill: #fff;
+    stroke: none;
+}
+
+.moon {
+    position: fixed;
+    top: 60px;
+    right: 60px;
+    width: 120px;
+    height: 120px;
+    opacity: 0.15;
+    z-index: 0;
+    background: radial-gradient(circle at 30% 30%, #ffe5b4, #b08d6a);
+    border-radius: 50%;
+    box-shadow: 0 0 80px rgba(255, 235, 180, 0.2);
+}
+
+.moon::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 30px;
+    width: 100px;
+    height: 100px;
+    background: #1a1f3a;
+    border-radius: 50%;
+}
+
+.ears {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 80px;
+    z-index: 0;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+.ears::before, .ears::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 50px;
+    height: 90px;
+    background: #4a7c98;
+    border-radius: 50% 50% 0 0;
+    transform-origin: bottom center;
+    border: 2px solid rgba(255,255,255,0.1);
+}
+
+.ears::before {
+    left: 30%;
+    transform: rotate(-15deg);
+}
+
+.ears::after {
+    right: 30%;
+    transform: rotate(15deg);
+}
+
+/* =========================================================
+   3. ЛОГОТИП И СОЦСЕТИ
+   ========================================================= */
+.logo-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.logo-header img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 30px rgba(79, 172, 254, 0.4));
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 10px 0 20px 0;
+}
+
+.social-links a {
+    color: #c1d9ff;
+    text-decoration: none;
+    font-size: 0.8rem;
+    padding: 8px 18px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.social-links a i {
+    font-size: 1.1em;
+}
+
+.social-links a:hover {
+    transform: scale(1.05);
+    background: rgba(79, 172, 254, 0.15);
+    border-color: #4a7c98;
+    box-shadow: 0 0 25px rgba(79, 172, 254, 0.15);
+    color: #fff;
+}
+
+/* =========================================================
+   4. НАВИГАЦИЯ (МЕНЮ)
+   ========================================================= */
+.main-nav {
+    margin: 20px 0 30px 0;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 15px 0;
+    text-align: center;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 25px;
+}
+
+.main-nav ul li a {
+    color: #7b8bb3;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s, transform 0.2s;
+    letter-spacing: 0.5px;
+}
+
+.main-nav ul li a:hover {
+    color: #c1d9ff;
+    transform: scale(1.05);
+}
+
+.main-nav ul li a.highlight-link {
+    color: #c1d9ff;
+    border-bottom: 1px solid #4a7c98;
+}
+
+/* =========================================================
+   5. СЕКЦИИ И КАРТОЧКИ (общие стили для всех страниц)
+   ========================================================= */
+.section {
+    background: rgba(20, 25, 45, 0.6);
+    backdrop-filter: blur(4px);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.section-title {
+    font-family: 'Angelic Bonques', 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #99b4e6;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-title span {
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.05);
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: #7b8bb3;
+}
+
+.about-content {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.about-image img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #4a7c98;
+}
+
+.about-text {
+    flex: 1;
+    line-height: 1.6;
+    color: #dbe6ff;
+}
+
+/* =========================================================
+   6. ПОРТФОЛИО (СЕТКА) - для главной
+   ========================================================= */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.portfolio-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    display: block;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 200px;
+}
+
+.portfolio-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.portfolio-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(79, 172, 254, 0.2);
+}
+
+.portfolio-card .card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    padding: 20px 10px 10px;
+    text-align: center;
+}
+
+.portfolio-card .card-overlay span {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* =========================================================
+   7. КОНТАКТЫ (БЛОК)
+   ========================================================= */
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.contact-links a {
+    color: #c1d9ff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-links a:hover {
+    color: #fff;
+}
+
+.footer-note {
+    text-align: center;
+    color: #7b8bb3;
+    font-size: 0.8rem;
+    padding: 20px 0 0 0;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* =========================================================
+   8. АДАПТИВ (Мобильные)
+   ========================================================= */
+@media (max-width: 700px) {
+    .container { padding: 15px; }
+    .main-nav ul { flex-direction: column; gap: 8px; }
+    .about-content { flex-direction: column; align-items: center; text-align: center; }
+    .portfolio-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+    .portfolio-card { height: 150px; }
+    .logo-header img { max-width: 200px; }
+    .social-links a { padding: 6px 14px; font-size: 0.7rem; }
+    .moon, .constellation { display: none; }
+    .ears { opacity: 0.1; width: 200px; height: 50px; }
+}

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYNRI — Очередь заказов</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <link rel="stylesheet" href="../style.css">
+
+    <script src="../scripts.js"></script>
+
+    <style>
+        /* =
+              1. БАЗОВЫЕ ЦВЕТА И ФОН (ГРАДИЕНТ)
+              = */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Убрали картинку, теперь градиент */
+            background: linear-gradient(135deg, #0b0d17 0%, #1a1f3a 40%, #2d1f4a 100%);
+            min-height: 100vh;
+            color: #e0e5ff;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* =
+              2. ДЕКОРАТИВНЫЕ ЭЛЕМЕНТЫ (ЗВЁЗДЫ, ЛУНА, СОЗВЕЗДИЕ)
+              = */
+
+        /* Общий контейнер для декора (чтобы не мешал контенту) */
+        .stars-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Звёзды (мерцающие) */
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite alternate;
+            box-shadow: 0 0 6px rgba(255,255,255,0.4);
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Падающая звезда */
+        .shooting-star {
+            position: absolute;
+            top: 10%;
+            left: 80%;
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(to right, rgba(255,255,255,0), #ffffff);
+            border-radius: 50%;
+            transform: rotate(-35deg);
+            animation: shoot 8s linear infinite;
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #fff;
+        }
+
+        @keyframes shoot {
+            0% { transform: translate(0, 0) rotate(-35deg); opacity: 0; }
+            5% { opacity: 1; }
+            20% { opacity: 1; }
+            40% { opacity: 0; transform: translate(-600px, 400px) rotate(-35deg); }
+            100% { opacity: 0; }
+        }
+
+        .constellation {
+            position: fixed;
+            bottom: 60px;
+            right: 40px;
+            width: 200px;
+            height: 150px;
+            opacity: 0.25;
+            z-index: 0;
+            stroke: rgba(255,255,255,0.6);
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .constellation circle {
+            fill: #fff;
+            stroke: none;
+        }
+
+        /* Луна (полумесяц) */
+        .moon {
+            position: fixed;
+            top: 60px;
+            right: 60px;
+            width: 120px;
+            height: 120px;
+            opacity: 0.15;
+            z-index: 0;
+            background: radial-gradient(circle at 30% 30%, #ffe5b4, #b08d6a);
+            border-radius: 50%;
+            box-shadow: 0 0 80px rgba(255, 235, 180, 0.2);
+        }
+
+        .moon::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            width: 100px;
+            height: 100px;
+            background: #1a1f3a;
+            border-radius: 50%;
+        }
+
+        .ears {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 80px;
+            z-index: 0;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .ears::before, .ears::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 50px;
+            height: 90px;
+            background: #4a7c98;
+            border-radius: 50% 50% 0 0;
+            transform-origin: bottom center;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .ears::before {
+            left: 30%;
+            transform: rotate(-15deg);
+        }
+
+        .ears::after {
+            right: 30%;
+            transform: rotate(15deg);
+        }
+
+        /* =
+              3. ОСНОВНОЙ КОНТЕЙНЕР
+              = */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            width: 100%;
+            background: rgba(11, 13, 23, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 30px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+
+        @font-face {
+            font-family: 'Angelic Bonques';
+            src: url('fonts/Angelic Bonques Sans Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Bergamasco';
+            src: url('fonts/BergamascoLight.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Pixelzone';
+            src: url('fonts/Pixelzone.ttf') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        h1, h2, .order-nick {
+            font-family: 'Angelic Bonques', 'Playfair Display', serif;
+            letter-spacing: 1px;
+        }
+
+        /* =
+              5. ЛОГОТИП И СОЦИАЛКИ
+              = */
+        .logo-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-header img {
+            max-width: 100%;
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 0 30px rgba(79, 172, 254, 0.4));
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 15px 0 25px 0;
+        }
+
+        .social-links a {
+            color: #c1d9ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            padding: 8px 18px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        .social-links a i {
+            font-size: 1.1em;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.05);
+            background: rgba(79, 172, 254, 0.15);
+            border-color: #4a7c98;
+            box-shadow: 0 0 25px rgba(79, 172, 254, 0.15);
+            color: #fff;
+        }
+
+        /* =
+              6. СТИЛИ КАРТОЧЕК
+              = */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #c1d9ff;
+            text-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+            text-align: center;
+        }
+
+        .sub-title {
+            font-size: 0.9rem;
+            color: #7b8bb3;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .section {
+            background: rgba(20, 25, 45, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: #99b4e6;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title span {
+            font-size: 0.8rem;
+            background: rgba(255,255,255,0.05);
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #7b8bb3;
+        }
+
+        .order-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #4a7c98;
+            background: #141c2b;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .order-card:hover {
+            transform: translateX(3px);
+        }
+
+        /* Фон прогресса */
+        .order-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: var(--progress, 0%);
+            background: rgba(74, 124, 152, 0.25);
+            transition: width 0.5s ease;
+            z-index: 0;
+        }
+
+        .order-nick {
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #dbe6ff;
+            letter-spacing: 0.5px;
+        }
+
+        .task-name {
+            font-weight: 700;
+            color: #88c0d0;
+            margin-left: 4px;
+        }
+
+        .order-right {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .payment-badge {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .payment-paid {
+            background: #1b4a3b;
+            color: #6fcf97;
+        }
+
+        .payment-reserved {
+            background: #4a7c98;
+            color: #e0e5ff;
+        }
+
+        .payment-unpaid {
+            background: #4a2e2e;
+            color: #f28b8b;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #7b8bb3;
+            min-width: 35px;
+            text-align: right;
+        }
+
+        /* Иконка срочности (новая) */
+        .urgency-icon {
+            position: relative;
+            z-index: 1;
+            margin-right: 8px;
+            font-size: 1.1rem;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .urgency-urgent {
+            color: #f1c40f; /* Жёлтый/золотой для луны */
+        }
+        .urgency-normal {
+            color: #7b8bb3; /* Серо-голубой для звезды */
+        }
+
+        /* =
+              7. АДАПТИВ
+              = */
+        @media (max-width: 650px) {
+            .container { padding: 15px; }
+            .order-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .order-right {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .order-nick {
+                font-size: 1rem;
+            }
+            .logo-header img {
+                max-width: 200px;
+            }
+            .social-links a {
+                padding: 6px 14px;
+                font-size: 0.7rem;
+            }
+            .moon, .constellation {
+                display: none;
+            }
+            .ears {
+                opacity: 0.1;
+                width: 200px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars-wrapper">
+        <!-- Звёзды (генерация через JS) -->
+        <div id="stars-container"></div>
+
+        <!-- Падающая звезда -->
+        <div class="shooting-star"></div>
+
+        <!-- Созвездие (SVG) -->
+        <svg class="constellation" viewBox="0 0 200 150">
+            <polyline points="30,80 70,40 120,60 160,20 180,90 130,110 70,40" />
+            <circle cx="30" cy="80" r="3" />
+            <circle cx="70" cy="40" r="4" />
+            <circle cx="120" cy="60" r="3" />
+            <circle cx="160" cy="20" r="4" />
+            <circle cx="180" cy="90" r="3" />
+            <circle cx="130" cy="110" r="4" />
+        </svg>
+
+        <!-- Луна -->
+        <div class="moon"></div>
+
+        <!-- Ушки (декоративные) -->
+        <div class="ears"></div>
+    </div>
+
+    <!-- =
+        ОСНОВНОЙ КОНТЕНТ
+        = -->
+    <div class="container">
+
+        <!-- ЛОГОТИП -->
+        <div class="logo-header">
+            <img src="/images/logo.png" alt="LYNRI Logo">
+        </div>
+
+        <!-- =========================================================
+    НАВИГАЦИЯ (МЕНЮ)
+    ========================================================= -->
+        <nav class="main-nav">
+            <ul>
+                <li><a href="../index.html">Главная</a></li>
+                <li><a href="vtuber.html">Vtuber Model</a></li>
+                <li><a href="chibi.html">Chibi Model</a></li>
+                <li><a href="debut.html">Debut Pack</a></li>
+                <li><a href="emotes.html">Emotes</a></li>
+                <li><a href="terms.html">✦ Terms</a></li>
+                <li><a href="orders.html" class="highlight-link">Очередь заказов</a></li>
+                <li><a href="../index.html#contact">Контакты</a></li>
+            </ul>
+        </nav>
+
+        <!-- СОЦИАЛКИ
+        <div class="social-links">
+            <a href="https://vk.com/lynriblauheart" target="_blank" aria-label="VK">
+                <i class="fa-brands fa-vk"></i> VK
+            </a>
+            <a title="https://discord.gg/lynriblauheart" target="_blank" aria-label="Discord">
+                <i class="fa-brands fa-discord"></i> lynriblauheart
+            </a>
+            <a href="https://lynxheart.myportfolio.com/work" target="_blank" aria-label="Портфолио">
+                <i class="fa-solid fa-briefcase"></i> Портфолио
+            </a>
+        </div>
+        -->
+
+        <!-- ЗАГОЛОВОК -->
+        <h1>✦ Очередь заказов</h1>
+        <div class="sub-title">в работе</div>
+
+        <!-- Блок: Активные -->
+        <div class="section" id="active-section">
+            <div class="section-title">
+                <span>Активные</span>
+                <span id="active-count">0</span>
+            </div>
+            <div id="active-list"></div>
+        </div>
+
+        <!-- Блок: Бронь -->
+        <div class="section" id="reserved-section">
+            <div class="section-title">
+                <span>Бронь</span>
+                <span id="reserved-count">0</span>
+            </div>
+            <div id="reserved-list"></div>
+        </div>
+
+        <!-- Блок: Не начато -->
+        <div class="section" id="notstarted-section">
+            <div class="section-title">
+                <span>Не начато</span>
+                <span id="notstarted-count">0</span>
+            </div>
+            <div id="notstarted-list"></div>
+        </div>
+
+        <!-- Блок: Выполнено -->
+        <div class="section" id="done-section">
+            <div class="section-title">
+                <span>Выполнено</span>
+                <span id="done-count">0</span>
+            </div>
+            <div id="done-list"></div>
+        </div>
+
+    </div>
+
+
+    <script>
+        // Загрузка заказов
+        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSNhwUR_3ETiJWZ6vfwdBW4qTmyRt2Hpr75f9pdYQv3sspDYTM1a3YEpZRVk6puR47KJiubB7EDcAG7/pub?output=csv';
+
+        const PAYMENT_CLASSES = {
+            'Оплачено': 'payment-paid',
+            'Оплачено 50%': 'payment-paid',
+            'Оплачена часть': 'payment-paid',
+            'Оплачена бронь': 'payment-reserved',
+            'Бронь': 'payment-reserved',
+            'Не оплачено': 'payment-unpaid'
+        };
+
+        async function loadOrders() {
+            try {
+                const response = await fetch(GOOGLE_SHEETS_CSV_URL, { cache: 'no-store' });
+                if (!response.ok) throw new Error('Ошибка загрузки таблицы');
+                const csvText = await response.text();
+
+                // Используем PapaParse для правильного парсинга CSV с кавычками и запятыми
+                const parsed = Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    delimiter: ',',
+                    quoteChar: '"'
+                });
+
+                // Преобразуем в наш формат
+                const orders = parsed.data.map(row => {
+                    let payment = (row['Оплата'] || 'Не оплачено').trim();
+                    if (/^\d+$/.test(payment)) {
+                        payment = 'Не оплачено';
+                    }
+
+                    return {
+                        owner: (row['Владелец'] || 'Без имени').trim(),
+                        task: (row['Задача'] || 'Задача').trim(),
+                        status: (row['Статус'] || 'Не начато').trim(),
+                        payment: payment,
+                        progress: parseInt(row['Процент выполненой работы']) || 0,
+                        urgency: (row['Столбец 1'] || '').trim()
+                    };
+                });
+
+                const validOrders = orders.filter(o => o.owner !== 'Без имени');
+                renderOrders(validOrders);
+
+            } catch (error) {
+                console.error('Ошибка при загрузке:', error);
+                document.querySelector('#active-list').innerHTML =
+                    '<p style="color:#f28b8b; text-align:center; padding:20px;">Ошибка загрузки списка. Проверьте ссылку CSV.</p>';
+            }
+        }
+
+        function renderOrders(orders) {
+            const active = orders.filter(o => o.status === 'Выполняется');
+            const reserved = orders.filter(o => o.status === 'Бронь' || o.payment === 'Бронь' || o.payment === 'Оплачена бронь');
+            const notStarted = orders.filter(o => o.status === 'Не начато');
+            const done = orders.filter(o => o.status === 'Выполнено');
+
+            function createCard(order) {
+                const badgeClass = PAYMENT_CLASSES[order.payment] || 'payment-unpaid';
+                
+                // Обработка срочности
+                let urgencyIcon = '';
+                let urgencyClass = '';
+                if (order.urgency === '☾') {
+                    urgencyIcon = '☾';
+                    urgencyClass = 'urgency-urgent';
+                } else if (order.urgency === '✰') {
+                    urgencyIcon = '✰';
+                    urgencyClass = 'urgency-normal';
+                }
+
+                return `
+                    <div class="order-card" style="--progress: ${order.progress}%;">
+                        <span class="order-nick">
+                            ${urgencyIcon ? `<span class="urgency-icon ${urgencyClass}">${urgencyIcon}</span>` : ''}
+                            ${order.owner} 
+                            <span class="task-name">[${order.task}]</span>
+                        </span>
+                        <div class="order-right">
+                            <span class="payment-badge ${badgeClass}">${order.payment}</span>
+                            <span class="progress-text">${order.progress}%</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('active-list').innerHTML = active.map(createCard).join('');
+            document.getElementById('reserved-list').innerHTML = reserved.map(createCard).join('');
+            document.getElementById('notstarted-list').innerHTML = notStarted.map(createCard).join('');
+            document.getElementById('done-list').innerHTML = done.map(createCard).join('');
+
+            document.getElementById('active-count').textContent = active.length;
+            document.getElementById('reserved-count').textContent = reserved.length;
+            document.getElementById('notstarted-count').textContent = notStarted.length;
+            document.getElementById('done-count').textContent = done.length;
+        }
+
+        loadOrders();
+        setInterval(loadOrders, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYNRI — Emotes</title>
+
+    <!-- Шрифты + Иконки -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* Специфичные стили для страницы Emotes */
+        .page-title {
+            font-family: 'Angelic Bonques', 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #c1d9ff;
+            text-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Макет с картинкой слева и текстом справа */
+        .image-text-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .image-text-layout .image-side {
+            flex: 0 0 350px; /* Фиксированная ширина для картинки */
+            max-width: 350px;
+        }
+
+        .image-text-layout .image-side img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .image-text-layout .image-side img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(79, 172, 254, 0.2);
+        }
+
+        .image-text-layout .text-side {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .text-side h3 {
+            font-family: 'Angelic Bonques', 'Playfair Display', serif;
+            color: #99b4e6;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .text-side p {
+            color: #dbe6ff;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .text-side p.price {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #c1d9ff;
+        }
+
+        .text-side p.note {
+            color: #7b8bb3;
+            font-size: 0.9rem;
+        }
+
+        /* Адаптация для мобильных */
+        @media (max-width: 700px) {
+            .image-text-layout {
+                flex-direction: column;
+                align-items: center;
+            }
+            .image-text-layout .image-side {
+                flex: 0 0 auto;
+                max-width: 100%;
+                width: 100%;
+            }
+            .image-text-layout .text-side {
+                width: 100%;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================================
+        1. ДЕКОРАТИВНЫЕ ЭЛЕМЕНТЫ
+        ========================================================= -->
+    <div class="stars-wrapper">
+        <div id="stars-container"></div>
+        <div class="shooting-star"></div>
+        <svg class="constellation" viewBox="0 0 200 150">
+            <polyline points="30,80 70,40 120,60 160,20 180,90 130,110 70,40" />
+            <circle cx="30" cy="80" r="3" />
+            <circle cx="70" cy="40" r="4" />
+            <circle cx="120" cy="60" r="3" />
+            <circle cx="160" cy="20" r="4" />
+            <circle cx="180" cy="90" r="3" />
+            <circle cx="130" cy="110" r="4" />
+        </svg>
+        <div class="moon"></div>
+        <div class="ears"></div>
+    </div>
+
+    <!-- =========================================================
+        2. ОСНОВНОЙ КОНТЕЙНЕР
+        ========================================================= -->
+    <div class="container">
+
+        <!-- ЛОГОТИП -->
+        <div class="logo-header">
+            <img src="../images/logo.png" alt="LYNRI Logo">
+        </div>
+
+        <!-- =========================================================
+            3. НАВИГАЦИЯ (МЕНЮ)
+            ========================================================= -->
+        <nav class="main-nav">
+            <ul>
+                <li><a href="../index.html">Главная</a></li>
+                <li><a href="vtuber.html">Vtuber Model</a></li>
+                <li><a href="chibi.html">Chibi Model</a></li>
+                <li><a href="debut.html">Debut Pack</a></li>
+                <li><a href="emotes.html" class="highlight-link">Emotes</a></li>
+                <li><a href="terms.html">✦ Terms</a></li>
+                <li><a href="orders.html">Очередь заказов</a></li>
+                <li><a href="../index.html#contact">Контакты</a></li>
+            </ul>
+        </nav>
+
+        <!-- =========================================================
+            4. ОСНОВНОЙ КОНТЕНТ
+            ========================================================= -->
+        <h1 class="page-title">EMOTES</h1>
+
+        <!-- БЛОК 1: ЭМОТЫ (ЦЕНЫ) -->
+        <section class="section">
+            <div class="image-text-layout">
+                <div class="image-side">
+                    <!-- ЗАМЕНИТЕ ПУТЬ НА ВАШЕ ИЗОБРАЖЕНИЕ С ЭМОТАМИ -->
+                    <img src="../images/emotes1.jpg" alt="Emotes">
+                </div>
+                <div class="text-side">
+                    <p class="price">4 шт. — 2 600 ₽</p>
+                    <p class="price">6 шт. — 3 000 ₽</p>
+                    <p class="price">10 шт. — 4 500 ₽</p>
+                    <p class="note">*Другое количество обсуждается в лс</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- БЛОК 2: PANELS / ART / PNG -->
+        <section class="section">
+            <div class="image-text-layout">
+                <div class="image-side">
+                    <!-- ЗАМЕНИТЕ ПУТЬ НА ВАШЕ ИЗОБРАЖЕНИЕ С ЧИБИ -->
+                    <img src="../images/panel1.png" alt="Panels">
+                </div>
+                <div class="text-side">
+                    <h3>Panels | Art | PNG</h3>
+                    <p class="price">Хэд — 1 900 ₽</p>
+                    <p class="price">Халф — 2 900 ₽</p>
+                    <p class="price">Фулл — 3 700 ₽</p>
+                    <p class="note">*Нарезать под анимацию (алерт/арт) — 1 500 ₽</p>
+                    <p class="note">*Цена за фон/нарезку арта зависит от сложности — от 1 000 ₽</p>
+                    <p class="note">*За сложного и детального персонажа доплата от 500 ₽</p>
+                    <p class="note">*На PNG формате будет нарезано несколько частей и данный арт будет подходить для pngtuber+</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- БЛОК 3: БОЛЬШАЯ КАРТИНКА (ПРИМЕР РАБОТЫ) -->
+        <section class="section">
+            <div class="image-text-layout" style="display: block; text-align: center;">
+                <div class="image-side" style="margin: 0 auto; max-width: 600px;">
+                    <!-- ЗАМЕНИТЕ ПУТЬ НА ВАШЕ БОЛЬШОЕ ИЗОБРАЖЕНИЕ -->
+                    <img src="../images/panel2.png" alt="Panels Example">
+                </div>
+            </div>
+        </section>
+
+        <!-- ФУТЕР -->
+        <div class="footer-note">
+            <p>© LYNRI 2026</p>
+        </div>
+
+    </div>
+
+    <div id="lightbox-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center; cursor:pointer;">
+        <span style="position:absolute; top:20px; right:30px; color:#fff; font-size:40px; font-weight:bold; cursor:pointer;">×</span>
+        <img id="lightbox-image" style="max-width:90%; max-height:90%; border-radius:8px; box-shadow:0 0 30px rgba(0,0,0,0.5);">
+    </div>
+
+    <script src="../scripts.js"></script>
+
+</body>
+</html>
